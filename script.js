@@ -210,11 +210,11 @@ function loadSettlePage(){
 
 /* helper */
 function getUserName(email){ const u = getUsers().find(x=>x.email===email); return u? u.name : email }
-const API = "http://localhost:5000/api";
+const API = "https://fairshare-backend-3nth.onrender.com/api";
 async function sendInvite() {
     const email = document.getElementById("inviteEmail").value;
 
-    const res = await fetch("http://localhost:3000/send-invite", {
+    const res = await fetch("https://fairshare-backend-3nth.onrender.com/send-invite", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
@@ -228,3 +228,4 @@ async function sendInvite() {
         alert("Failed: " + data.error);
     }
 }
+
