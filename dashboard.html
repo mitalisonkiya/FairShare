@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FairShare — Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <div class="sidebar">
+      <div class="logo">FairShare</div>
+      <div class="small">Split bills quickly • Stay fair</div>
+      <button class="nav-btn" onclick="window.location.href='dashboard.html'">Overview</button>
+      <button class="nav-btn" onclick="window.location.href='groups.html'">Groups</button>
+      <button class="nav-btn" onclick="window.location.href='add-group.html'">New Group</button>
+      <button class="nav-btn" onclick="window.location.href='add-expense.html'">Add Expense</button>
+      <button class="nav-btn" onclick="window.location.href='view-expenses.html'">View Expenses</button>
+      <button class="nav-btn" onclick="window.location.href='settle-up.html'">Settle Up</button>
+      <div style="flex:1"></div>
+      <div class="small-muted">Logged in as:</div>
+      <div class="badge" id="curUserBox"></div>
+      <button class="nav-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="main">
+      <div class="header-row">
+        <div><h3>Overview</h3><div class="small-muted">Quick summary</div></div>
+        <div class="flex">
+          <button class="btn" onclick="window.location.href='groups.html'">Manage Groups</button>
+          <button class="btn secondary" onclick="window.location.href='add-group.html'">New Group</button>
+        </div>
+      </div>
+
+      <div id="overviewContent"></div>
+      <div class="footer">FairShare • Local demo • Data stored in browser</div>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+<script>
+  if(!requireAuthRedirect()){};
+  document.getElementById("curUserBox").innerText = getCurrentUser() || "";
+  const groups = getGroups();
+  const cont = document.getElementById("overviewContent");
+  if(groups.length===0) cont.innerHTML = "<div class='card small-muted'>No groups yet. Create one.</div>";
+  else {
+    cont.innerHTML = groups.map(g=>{
+      const total = (g.expenses||[]).reduce((s,e)=>s+Number(e.amount),0);
+      const members = (g.members||[]).length;
+      return `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center">
+        <div><b>${escapeHtml(g.name)}</b><div class="small-muted">Members: ${members}</div></div>
+        <div style="text-align:right"><div class="small-muted">Total spent</div><div style="font-weight:700">₹ ${total.toFixed(2)}</div>
+        <div style="margin-top:8px"><button class="btn" onclick="openGroup('${g.id}')">Open</button></div></div></div></div>`;
+    }).join("");
+  }
+</script>
+</body>
+</html>

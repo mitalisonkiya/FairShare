@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FairShare — Members</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <div class="sidebar">
+      <div class="logo">FairShare</div>
+      <button class="nav-btn" onclick="window.location.href='group.html'">Back</button>
+      <div style="flex:1"></div>
+      <button class="nav-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="main">
+      <div class="header-row"><div><h3 id="gp_title2">Members</h3><div class="small-muted">Add / Remove members</div></div></div>
+
+      <div class="card">
+        <h4>Add Member</h4>
+        <input id="memberName" placeholder="Name">
+        <input id="memberEmail" placeholder="Email">
+        <div class="flex"><button class="btn" onclick="addMemberToActive()">Add Member</button></div>
+      </div>
+<script>// Send email invitation
+fetch("http://localhost:5000/send-invite", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        email: email,
+        group_name: currentGroup,
+        invited_by: localStorage.getItem("userName") || "Group Admin"
+    })
+});
+</script>
+      <div id="memberList"></div>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+<script> loadGroupDetails(); </script>
+</body>
+</html>

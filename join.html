@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Join Group • FairShare</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wrapper {
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+            padding: 35px;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            animation: fadeIn 0.5s ease;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        #groupName {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            outline: none;
+            margin: 12px 0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #00c6ff;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0072ff;
+            transform: scale(1.03);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #baffda;
+        }
+
+        .error {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #ffb3b3;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2 id="groupTitle">Joining group...</h2>
+
+    <div id="joinBox" style="display:none;">
+        <input id="joinName" placeholder="Your Name" />
+        <input id="joinEmail" placeholder="Your Email" />
+
+        <button onclick="joinGroup()">Join Group</button>
+    </div>
+
+    <p id="status"></p>
+</div>
+
+<script>
+    let token = window.location.pathname.split("/").pop();
+    let groupId = null;
+
+    // Load group details
+    fetch(`/api/join/${token}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById("groupTitle").innerText = data.error;
+                return;
+            }
+
+            groupId = data.group_id;
+            document.getElementById("groupTitle").innerText =
+                "Join Group: " + data.group_name;
+
+            document.getElementById("joinBox").style.display = "block";
+        });
+
+    function joinGroup() {
+        const name = document.getElementById("joinName").value;
+        const email = document.getElementById("joinEmail").value;
+
+        fetch("/api/join-group", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token, name, email })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("status").innerText = data.message || data.error;
+        });
+    }
+</script>
+
+
+</body>
+</html>

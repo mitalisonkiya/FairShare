@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FairShare — Signup</title>
+  <link rel="stylesheet" href="style.css">
+  <style> body{display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#4e54c8,#8f94fb)} </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2>Create account</h2>
+    <input id="su_name" placeholder="Full name">
+    <input id="su_email" type="email" placeholder="Email">
+    <input id="su_password" type="password" placeholder="Password (min 6)">
+    <input id="su_password2" type="password" placeholder="Confirm password">
+    <button class="btn" onclick="signupUser()">Sign up</button>
+    <div class="links"><a class="small-muted" href="login.html">Already have account? Login</a></div>
+  </div>
+  <script>document.getElementById("signupForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        alert("Signup Successful");
+        window.location.href = "login.html";
+    } else {
+        alert(data.message);
+    }
+});
+</script>
+<script src="script.js"></script>
+</body>
+</html>
