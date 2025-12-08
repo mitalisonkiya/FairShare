@@ -55,11 +55,11 @@
     </div>
   </div>
 </div>
-<div><h3>Invite Member</h3>
-<input type="email" id="inviteEmail" placeholder="Enter email">
-<button onclick="sendInvite()">Send Invite</button>
+<div><input type="email" id="inviteEmail" placeholder="Enter email" />
+<button onclick="sendInvite()" class="invite-btn">Send Invite</button>
 </div>
 <script src="script.js"></script>
 <script> loadGroupDetails(); (function(){/* populate expPaidBy */ const gid=getActiveGroupId(); const g=getGroups().find(x=>x.id===gid); if(!g) return; document.getElementById('expPaidBy').innerHTML = (g.members||[]).map(m=>`<option value="${m.email}">${escapeHtml(m.name)} (${escapeHtml(m.email)})</option>`).join(''); })() </script>
 </body>
 </html>
+
