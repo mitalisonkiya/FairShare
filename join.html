@@ -93,55 +93,22 @@
 
 <body>
 
-<div class="container">
-    <h2 id="groupTitle">Joining group...</h2>
-
-    <div id="joinBox" style="display:none;">
-        <input id="joinName" placeholder="Your Name" />
-        <input id="joinEmail" placeholder="Your Email" />
-
-        <button onclick="joinGroup()">Join Group</button>
-    </div>
-
-    <p id="status"></p>
-</div>
-
+<h2>Joining group...</h2>
 <script>
-    let token = window.location.pathname.split("/").pop();
-    let groupId = null;
+const urlParams = new URLSearchParams(window.location.search);
+const groupId = urlParams.get("group");
 
-    // Load group details
-    fetch(`/api/join/${token}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.error) {
-                document.getElementById("groupTitle").innerText = data.error;
-                return;
-            }
-
-            groupId = data.group_id;
-            document.getElementById("groupTitle").innerText =
-                "Join Group: " + data.group_name;
-
-            document.getElementById("joinBox").style.display = "block";
-        });
-
-    function joinGroup() {
-        const name = document.getElementById("joinName").value;
-        const email = document.getElementById("joinEmail").value;
-
-        fetch("/api/join-group", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token, name, email })
-        })
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById("status").innerText = data.message || data.error;
-        });
-    }
+if (!groupId) {
+    document.body.innerHTML = "<h2>Invalid Invite Link</h2>";
+} else {
+    localStorage.setItem("fs_pending_join_group", groupId);
+    window.location.href = "group.html";
+}
 </script>
+</body>
+</html>
 
 
 </body>
 </html>
+
