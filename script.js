@@ -214,20 +214,23 @@ function getUserName(email){ const u = getUsers().find(x=>x.email===email); retu
 const API = "https://fairshare-backend-3nth.onrender.com/api";
 async function sendInvite() {
     const email = document.getElementById("inviteEmail").value;
+    const groupName = localStorage.getItem("currentGroupName");
+    const joinLink = `${window.location.origin}/join.html?group=${groupName}`;
 
-    const res = await fetch("https://fairshare-backend-3nth.onrender.com/send-invite", {
+    const response = await fetch("https://fairshare-back-end-3nth.onrender.com/send-invite", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email, groupName, joinLink })
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
     if (data.success) {
-        alert("Invite sent!");
+        alert("Invite sent successfully!");
     } else {
-        alert("Failed: " + data.error);
+        alert("Failed to send invite: " + data.error);
     }
 }
+
 
 
