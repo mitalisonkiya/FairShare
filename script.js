@@ -233,24 +233,30 @@ const BACKEND_URL = "https://fairshare-backend-3nth.onrender.com";
 function getUserName(email){ const u = getUsers().find(x=>x.email===email); return u? u.name : email }
 const API = "https://fairshare-backend-3nth.onrender.com/api";
 async function sendInvite() {
-    const email = document.getElementById("inviteEmail").value;
-    const groupName = localStorage.getItem("currentGroupName");
-    const joinLink = `${window.location.origin}/join.html?group=${groupName}`;
+    const email = document.getElementById("inviteEmail").value.trim();
+    const groupId = getActiveGroupId();
+    const groups = getGroups();
+    const group = groups.find(g => g.id === groupId);
 
-    const response = await fetch("https://fairshare-back-end-3nth.onrender.com/send-invite", {
+    if (!email) return alert("Enter email");
+    if (!group) return alert("Group not found");
+
+    const res = await fetch("https://fairshare-backend-3nth.onrender.com/send-invite", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, groupName, joinLink })
+        body: JSON.stringify({
+            email,
+            groupId,
+            groupName: group.name
+        })
     });
 
-    const data = await response.json();
-
-    if (data.success) {
-        alert("Invite sent successfully!");
-    } else {
-        alert("Failed to send invite: " + data.error);
-    }
+    const data = await res.json();
+    if (data.success) alert("Invite Sent!");
+    else alert("Error: " + data.error);
 }
+
+
 
 
 
