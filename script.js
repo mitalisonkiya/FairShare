@@ -207,6 +207,7 @@ function loadSettlePage(){
   if(tx.length===0){ box.innerHTML = "<div class='small-muted center'>All settled — no transactions required.</div>"; return }
   box.innerHTML = tx.map(t=>`<div class='card'><b>${escapeHtml(t.from)}</b> → <b>${escapeHtml(t.to)}</b> : ₹ ${t.amount.toFixed(2)}</div>`).join("");
 }
+const BACKEND_URL = "https://fairshare-backend-3nth.onrender.com";
 
 /* helper */
 function getUserName(email){ const u = getUsers().find(x=>x.email===email); return u? u.name : email }
@@ -228,4 +229,5 @@ async function sendInvite() {
         alert("Failed: " + data.error);
     }
 }
+
 
