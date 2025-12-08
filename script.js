@@ -124,6 +124,26 @@ function loadGroupDetails(){
       </div></div>`;
     memBox.appendChild(div);
   });
+  (function handleJoin() {
+    const pending = localStorage.getItem("fs_pending_join_group");
+    if (!pending) return;
+
+    const groups = getGroups();
+    const g = groups.find(x => x.id === pending);
+    if (!g) return;
+
+    const email = getCurrentUser();
+    const name = getUserName(email);
+
+    if (!g.members.some(m => m.email === email)) {
+        g.members.push({ name, email });
+        saveGroups(groups);
+        alert("You joined the group!");
+    }
+
+    localStorage.removeItem("fs_pending_join_group");
+})();
+
   renderBalances(); renderExpenses();
 }
 function addMemberToActive(){
@@ -231,6 +251,7 @@ async function sendInvite() {
         alert("Failed to send invite: " + data.error);
     }
 }
+
 
 
 
