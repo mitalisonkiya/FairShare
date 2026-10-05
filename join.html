@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Group — FairShare</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .join-wrapper {
+            width: 440px;
+            max-width: 95%;
+            background: var(--surface-base);
+            border: 1px solid var(--line-strong);
+            padding: 36px 32px;
+            border-radius: var(--radius-md);
+            color: var(--ink-pure);
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+            position: relative;
+        }
+        .join-wrapper::before {
+            content: "// GROUP INVITATION";
+            position: absolute;
+            top: -10px;
+            left: 18px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            background: var(--canvas);
+            padding: 0 6px;
+            color: var(--signal-green);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="join-wrapper">
+    <h2 style="font-size:24px;margin-bottom:8px;">Join Shared Ledger</h2>
+    <div id="groupNameDisplay" class="mono" style="font-size:14px;color:var(--signal-green);margin-bottom:20px;">
+        Verifying Invitation Link...
+    </div>
+
+    <form id="joinForm" onsubmit="event.preventDefault(); processJoin();">
+        <label class="small-muted" style="text-align:left;display:block;margin-bottom:4px;">Your Full Name</label>
+        <input type="text" id="joinName" placeholder="e.g. Maya Lin" required style="margin-bottom:12px;">
+
+        <label class="small-muted" style="text-align:left;display:block;margin-bottom:4px;">Your Email Address</label>
+        <input type="email" id="joinEmail" placeholder="e.g. maya@example.com" required style="margin-bottom:18px;">
+
+        <button type="submit" id="joinSubmitBtn" class="btn" style="width:100%;">Accept & Join Group</button>
+    </form>
+
+    <div class="links" style="justify-content:center;margin-top:16px;">
+        <a href="dashboard.html" class="small-muted">← Go to Dashboard</a>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const groupParam = urlParams.get("group") || urlParams.get("code") || "FairShare Group";
+    const groupDisplay = document.getElementById("groupNameDisplay");
+    
+    // Safely assign text content (XSS protection)
+    groupDisplay.textContent = "Group: " + groupParam;
+
+    function processJoin() {
+        const nameInput = document.getElementById("joinName");
+        const emailInput = document.getElementById("joinEmail");
+        const name = nameInput.value.trim();
+        const email = emailInput.value.trim().toLowerCase();
+
+        if (!name || !email) {
+            showToast("Please enter your name and email", true);
+            return;
+        }
+
+        const groups = getGroups();
+        let targetGroup = groups.find(g => g.id === groupParam || g.name.toLowerCase() === groupParam.toLowerCase());
+        
+        if (!targetGroup && groups.length > 0) {
+            targetGroup = groups[0];
+        }
+
+        if (targetGroup) {
+            if (!targetGroup.members.some(m => m.email === email)) {
+                targetGroup.members.push({ name, email });
+                saveGroups(groups);
+            }
+            setActiveGroupId(targetGroup.id);
+            showToast("Joined group successfully!");
+            setTimeout(() => { window.location.href = "group.html"; }, 600);
+        } else {
+            showToast("Joined group space!");
+            setTimeout(() => { window.location.href = "dashboard.html"; }, 600);
+        }
+    }
+</script>
+</body>
+</html>

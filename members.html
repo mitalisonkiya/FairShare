@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Manage Members</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a href="index.html" class="logo">
+        FAIRSHARE <span style="font-family:var(--font-mono); font-size:11px; color:var(--signal-green);">[FS]</span>
+      </a>
+      
+      <div class="sidebar-section-label">// LEDGER WORKSPACE</div>
+      <a class="nav-btn" href="dashboard.html">◈ Overview</a>
+      <a class="nav-btn" href="groups.html">👥 My Groups</a>
+      <a class="nav-btn" href="add-group.html">+ New Group</a>
+      <a class="nav-btn" href="add-expense.html">💸 Record Expense</a>
+      <a class="nav-btn" href="view-expenses.html">📜 Expense Logs</a>
+      <a class="nav-btn" href="settle-up.html">⚡ Settle Up</a>
+
+      <div style="flex:1;"></div>
+      <button class="nav-btn danger" onclick="logout()">⏻ Logout</button>
+    </aside>
+
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <h3>Member Roster</h3>
+          <div class="small-muted">Participants in active group ledger</div>
+        </div>
+        <div>
+          <a class="btn secondary" href="group.html">← Back to Group</a>
+        </div>
+      </div>
+
+      <!-- Add Member Card -->
+      <div class="card" style="max-width:540px;">
+        <div class="mono" style="font-size:11px;color:var(--signal-green);margin-bottom:8px;">// ADD PARTICIPANT</div>
+        
+        <label class="small-muted">Member Name</label>
+        <input id="memberName" placeholder="e.g. Maya Lin">
+        
+        <label class="small-muted" style="margin-top:10px;display:block;">Email Address</label>
+        <input id="memberEmail" type="email" placeholder="e.g. maya@example.com">
+        
+        <div class="flex" style="margin-top:16px;">
+          <button class="btn" onclick="addMemberToActive()">+ Add to Group</button>
+        </div>
+      </div>
+
+      <!-- Member List -->
+      <div class="card">
+        <div class="mono" style="font-size:11px;color:var(--ink-muted);margin-bottom:10px;text-transform:uppercase;">
+          Current Members
+        </div>
+        <div id="memberList"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    loadGroupDetails();
+  </script>
+</body>
+</html>

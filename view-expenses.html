@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Expense Logs</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a href="index.html" class="logo">
+        FAIRSHARE <span style="font-family:var(--font-mono); font-size:11px; color:var(--signal-green);">[FS]</span>
+      </a>
+      
+      <div class="sidebar-section-label">// LEDGER WORKSPACE</div>
+      <a class="nav-btn" href="dashboard.html">◈ Overview</a>
+      <a class="nav-btn" href="groups.html">👥 My Groups</a>
+      <a class="nav-btn" href="add-group.html">+ New Group</a>
+      <a class="nav-btn" href="add-expense.html">💸 Record Expense</a>
+      <a class="nav-btn active" href="view-expenses.html">📜 Expense Logs</a>
+      <a class="nav-btn" href="settle-up.html">⚡ Settle Up</a>
+
+      <div style="flex:1;"></div>
+      <button class="nav-btn danger" onclick="logout()">⏻ Logout</button>
+    </aside>
+
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <h3>Expense Logs</h3>
+          <div class="small-muted">All recorded transactions across active ledgers</div>
+        </div>
+        <div>
+          <a class="btn" href="add-expense.html">+ Add Expense</a>
+        </div>
+      </div>
+
+      <div id="allExpensesContainer" class="flex-col"></div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if (!requireAuthRedirect()) {}
+    const groups = getGroups();
+    const box = document.getElementById("allExpensesContainer");
+    if (groups.length === 0) {
+      box.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📜</div>
+          <div style="font-weight:700;font-size:15px;">No expense records found</div>
+          <div class="small-muted">Create a group and add expenses to see the combined log here.</div>
+          <a href="add-group.html" class="btn" style="margin-top:6px">+ Create Group</a>
+        </div>`;
+    } else {
+      let html = "";
+      let totalExpsCount = 0;
+      groups.forEach(g => {
+        const exps = g.expenses || [];
+        totalExpsCount += exps.length;
+        html += `
+          <div class="card" style="margin-bottom:12px;">
+            <div class="flex-between" style="margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line-subtle);">
+              <div>
+                <span class="mono" style="font-size:11px;color:var(--signal-green);">// GROUP LEDGER</span>
+                <div style="font-weight:800;font-size:16px;">${escapeHtml(g.name)}</div>
+              </div>
+              <button class="btn btn-sm secondary" onclick="openGroup('${g.id}')">Open Group →</button>
+            </div>`;
+        
+        if (exps.length === 0) {
+          html += `<div class="small-muted" style="padding:8px 0;">No expenses logged for this group yet.</div>`;
+        } else {
+          exps.slice().reverse().forEach(e => {
+            html += `
+              <div class="flex-between" style="padding:10px 0;border-bottom:1px dashed var(--line-subtle);">
+                <div>
+                  <div style="font-weight:700;font-size:13.5px;">${escapeHtml(e.name)}</div>
+                  <div class="small-muted" style="font-size:11px;">Paid by <span style="color:#fff;">${escapeHtml(e.paidByName)}</span> • ${escapeHtml(e.date)}</div>
+                </div>
+                <div class="mono" style="font-weight:800;font-size:14.5px;color:var(--signal-green);">
+                  ₹ ${Number(e.amount).toFixed(2)}
+                </div>
+              </div>`;
+          });
+        }
+        html += `</div>`;
+      });
+      box.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

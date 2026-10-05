@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Record Expense</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a href="index.html" class="logo">
+        FAIRSHARE <span style="font-family:var(--font-mono); font-size:11px; color:var(--signal-green);">[FS]</span>
+      </a>
+      
+      <div class="sidebar-section-label">// LEDGER WORKSPACE</div>
+      <a class="nav-btn" href="dashboard.html">◈ Overview</a>
+      <a class="nav-btn" href="groups.html">👥 My Groups</a>
+      <a class="nav-btn" href="add-group.html">+ New Group</a>
+      <a class="nav-btn active" href="add-expense.html">💸 Record Expense</a>
+      <a class="nav-btn" href="view-expenses.html">📜 Expense Logs</a>
+      <a class="nav-btn" href="settle-up.html">⚡ Settle Up</a>
+
+      <div style="flex:1;"></div>
+      <button class="nav-btn danger" onclick="logout()">⏻ Logout</button>
+    </aside>
+
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <h3 id="gp_title_exp">Record Shared Expense</h3>
+          <div class="small-muted">Log transaction to be split equally across members</div>
+        </div>
+      </div>
+
+      <div class="card" style="max-width:540px;">
+        <div class="mono" style="font-size:11px;color:var(--signal-green);margin-bottom:8px;">// TRANSACTION DETAILS</div>
+        
+        <label class="small-muted">Target Group Ledger</label>
+        <select id="selectGroup" onchange="onSelectGroupChange()"></select>
+        
+        <label class="small-muted" style="margin-top:10px;display:block;">Expense Description</label>
+        <input id="expName" placeholder="e.g. Dinner, Fuel, Internet Bill, Groceries">
+        
+        <label class="small-muted" style="margin-top:10px;display:block;">Amount (₹)</label>
+        <input id="expAmount" type="number" placeholder="0.00" min="0" step="0.01">
+        
+        <label class="small-muted" style="margin-top:10px;display:block;">Paid By</label>
+        <select id="expPaidBy"></select>
+
+        <div class="flex" style="margin-top:20px;">
+          <button class="btn" onclick="submitExpense()">Log Expense</button>
+          <a class="btn secondary" href="dashboard.html">Cancel</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if (!requireAuthRedirect()) {}
+    const groups = getGroups();
+    const selectGroupEl = document.getElementById("selectGroup");
+    const paidByEl = document.getElementById("expPaidBy");
+    let activeId = getActiveGroupId();
+
+    if (groups.length === 0) {
+      showToast("Create a group first!", true);
+      setTimeout(() => window.location.href = "add-group.html", 600);
+    } else {
+      if (!activeId || !groups.find(g => g.id === activeId)) {
+        activeId = groups[0].id;
+        setActiveGroupId(activeId);
+      }
+      selectGroupEl.innerHTML = groups.map(g => 
+        `<option value="${g.id}" ${g.id === activeId ? 'selected' : ''}>${escapeHtml(g.name)}</option>`
+      ).join('');
+      populatePaidBy();
+    }
+
+    function onSelectGroupChange() {
+      setActiveGroupId(selectGroupEl.value);
+      populatePaidBy();
+    }
+
+    function populatePaidBy() {
+      const curGid = getActiveGroupId();
+      const g = getGroups().find(x => x.id === curGid);
+      if (!g) return;
+      document.getElementById("gp_title_exp").innerText = "Record Expense — " + g.name;
+      paidByEl.innerHTML = (g.members || []).map(m => 
+        `<option value="${m.email}">${escapeHtml(m.name)} (${escapeHtml(m.email)})</option>`
+      ).join('');
+    }
+
+    function submitExpense() {
+      addExpenseToActive();
+      setTimeout(() => window.location.href = "group.html", 400);
+    }
+  </script>
+</body>
+</html>

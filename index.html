@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — High-Precision Group Expense Ledger & Settlement</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-layout {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 10px 0 40px;
+    }
+
+    /* System Status Top Bar */
+    .system-header {
+      border: 1px solid var(--line-strong);
+      background: var(--surface-base);
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .status-ticker {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      letter-spacing: 0.05em;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--secondary);
+      box-shadow: 0 0 10px var(--secondary);
+      display: inline-block;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Above-The-Fold Core Matrix */
+    .hero-matrix {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    /* Left Hero / Manifesto Panel */
+    .hero-panel {
+      border: 1px solid var(--line-strong);
+      background: var(--surface-base);
+      border-radius: var(--radius-sm);
+      padding: 32px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: relative;
+    }
+
+    .hero-panel::before {
+      content: "OVERVIEW // SPECIFICATION";
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .hero-title-massive {
+      font-family: var(--font-display);
+      font-size: clamp(2.3rem, 4.2vw, 3.6rem);
+      font-weight: 800;
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .hero-title-massive .signal-word {
+      color: var(--primary);
+    }
+
+    /* 4-Pillar Architectural Breakdown (What / Who / Why / Next) */
+    .four-pillars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding-top: 6px;
+    }
+
+    .pillar-box {
+      border: 1px solid var(--line-subtle);
+      background: var(--surface-raised);
+      border-radius: var(--radius-xs);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pillar-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pillar-tag.what { color: var(--accent); }
+    .pillar-tag.who { color: var(--primary); }
+    .pillar-tag.why { color: var(--secondary); }
+    .pillar-tag.next { color: var(--signal-coral); }
+
+    .pillar-content {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--ink-secondary);
+    }
+
+    /* Action Pipeline & CTA */
+    .action-pipeline {
+      border: 1px solid var(--line-strong);
+      background: #120d0c;
+      border-radius: var(--radius-xs);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pipeline-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .step-item {
+      padding: 8px;
+      background: var(--surface-base);
+      border: 1px solid var(--line-subtle);
+      border-radius: var(--radius-xs);
+      color: var(--ink-secondary);
+    }
+
+    .step-item span.num {
+      color: var(--primary);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Right Column: Live Proof Ledger */
+    .proof-panel {
+      border: 1px solid var(--line-strong);
+      background: var(--surface-base);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .proof-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .proof-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sheet-card {
+      background: var(--surface-raised);
+      border: 1px solid var(--line-subtle);
+      border-radius: var(--radius-xs);
+      padding: 14px 16px;
+    }
+
+    .sheet-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--line-subtle);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .sheet-row:last-child {
+      border-bottom: none;
+    }
+
+    .reconcile-card {
+      background: #140e0d;
+      border: 1px solid var(--secondary);
+      border-radius: var(--radius-xs);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .settle-wire {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: #0f0a09;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-xs);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    /* Below Fold Secondary Specs */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .spec-card {
+      border: 1px solid var(--line-strong);
+      background: var(--surface-base);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .spec-card-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    .spec-card-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .spec-card-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--ink-secondary);
+    }
+
+    /* System Footer */
+    .system-footer {
+      border-top: 1px solid var(--line-strong);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 900px) {
+      .hero-matrix {
+        grid-template-columns: 1fr;
+      }
+      .four-pillars-grid {
+        grid-template-columns: 1fr;
+      }
+      .pipeline-steps {
+        grid-template-columns: 1fr;
+      }
+      .system-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-layout">
+
+    <!-- System Status Top Bar -->
+    <header class="system-header">
+      <a href="index.html" class="brand-mark">
+        FAIRSHARE <span style="font-family:var(--font-mono); font-size:12px; color:var(--primary);">[FS-CORE]</span>
+      </a>
+
+      <div class="status-ticker">
+        <span><span class="status-dot"></span> RECONCILIATION ENGINE READY</span>
+        <span>•</span>
+        <span>LOCAL-FIRST ENCRYPTED</span>
+        <span>•</span>
+        <span>ZERO SETUP REQUIRED</span>
+      </div>
+
+      <div class="header-actions" id="navAuthSlot">
+        <a href="login.html" class="btn secondary" style="padding: 7px 14px; font-size: 11px;">Sign In</a>
+        <a href="signup.html" class="btn" style="padding: 7px 16px; font-size: 11px;">Get Started</a>
+      </div>
+    </header>
+
+    <!-- Above The Fold Hero: Clear What / Who / Why / Next Matrix -->
+    <section class="hero-matrix">
+      
+      <!-- Left Hero Panel -->
+      <div class="hero-panel">
+        <div class="hero-title-massive">
+          SPLIT GROUP BILLS.<br>
+          <span class="signal-word">ZERO AWKWARD MATH.</span><br>
+          SETTLE INSTANTLY.
+        </div>
+
+        <!-- 4-Pillar Explicit Brief Above The Fold -->
+        <div class="four-pillars-grid">
+          
+          <!-- 1. WHAT IT IS -->
+          <div class="pillar-box">
+            <div class="pillar-tag what">
+              <span>●</span> WHAT IT IS
+            </div>
+            <div class="pillar-content">
+              A high-precision shared expense ledger that automatically computes exact equal shares and tracks who paid for what in real time.
+            </div>
+          </div>
+
+          <!-- 2. WHO IT IS FOR -->
+          <div class="pillar-box">
+            <div class="pillar-tag who">
+              <span>●</span> WHO IT IS FOR
+            </div>
+            <div class="pillar-content">
+              Flatmates sharing rent and groceries, friend groups on vacations, dinner parties, and project teams sharing recurring costs.
+            </div>
+          </div>
+
+          <!-- 3. WHY IT MATTERS -->
+          <div class="pillar-box">
+            <div class="pillar-tag why">
+              <span>●</span> WHY IT MATTERS
+            </div>
+            <div class="pillar-content">
+              Eliminates messy spreadsheets and multi-person payment chains. Our debt-graph algorithm simplifies 10 debts into minimum direct transfers.
+            </div>
+          </div>
+
+          <!-- 4. WHAT TO DO NEXT -->
+          <div class="pillar-box">
+            <div class="pillar-tag next">
+              <span>●</span> WHAT TO DO NEXT
+            </div>
+            <div class="pillar-content">
+              Create a group, add members, record expenses, and click <b>Settle Up</b> to get the exact repayment transfers instantly.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Step Pipeline & Next Action CTA -->
+        <div class="action-pipeline">
+          <div class="pipeline-steps">
+            <div class="step-item">
+              <span class="num">01</span> Create Group
+            </div>
+            <div class="step-item">
+              <span class="num">02</span> Record Expenses
+            </div>
+            <div class="step-item">
+              <span class="num">03</span> 1-Click Settle
+            </div>
+          </div>
+
+          <div class="cta-row" id="heroCtaSlot">
+            <a href="signup.html" class="btn" style="padding: 12px 24px; font-size: 13px;">
+              <span>START SPLITTING NOW — IT'S FREE</span>
+              <span class="mono">→</span>
+            </a>
+            <a href="login.html" class="btn secondary" style="padding: 12px 20px; font-size: 13px;">
+              <span>SIGN IN TO ACCOUNT</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Calculation Proof Panel -->
+      <div class="proof-panel">
+        <div class="proof-header">
+          <div class="proof-title">
+            <span>// LIVE RECONCILIATION DEMO</span>
+          </div>
+          <div class="mono" style="font-size: 11px; color: var(--accent);">
+            [0.02ms RESOLVE]
+          </div>
+        </div>
+
+        <div>
+          <div class="mono" style="font-size: 11px; color: var(--ink-muted); margin-bottom: 8px;">
+            ACTIVE GROUP: <span style="color:var(--text); font-weight:700;">Goa Roadtrip (3 Members)</span>
+          </div>
+
+          <!-- Ledger Table -->
+          <div class="sheet-card">
+            <div class="sheet-row">
+              <span>Rahul (Paid ₹3,500)</span>
+              <span class="positive">+₹ 1,400.00</span>
+            </div>
+            <div class="sheet-row">
+              <span>Priya (Paid ₹2,800)</span>
+              <span class="positive">+₹ 700.00</span>
+            </div>
+            <div class="sheet-row">
+              <span>Amit (Paid ₹0)</span>
+              <span class="negative">-₹ 2,100.00</span>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--ink-muted); margin-top: 8px;">
+              Total Spent: ₹ 6,300.00 • Share per Member: ₹ 2,100.00
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculated Optimal Settlement Wire -->
+        <div class="reconcile-card">
+          <div class="mono" style="font-size: 10px; color: var(--primary); font-weight:700; text-transform:uppercase;">
+            ⚡ OPTIMAL SETTLEMENT (MINIMUM TRANSFERS)
+          </div>
+
+          <div class="settle-wire">
+            <div>
+              <span style="color:var(--signal-coral); font-weight:700;">Amit</span>
+              <span style="color:var(--ink-muted); margin:0 4px;">pays →</span>
+              <span style="color:var(--signal-green); font-weight:700;">Rahul</span>
+            </div>
+            <div class="positive">₹ 1,400.00</div>
+          </div>
+
+          <div class="settle-wire">
+            <div>
+              <span style="color:var(--signal-coral); font-weight:700;">Amit</span>
+              <span style="color:var(--ink-muted); margin:0 4px;">pays →</span>
+              <span style="color:var(--signal-green); font-weight:700;">Priya</span>
+            </div>
+            <div class="positive">₹ 700.00</div>
+          </div>
+
+          <div class="mono" style="font-size: 10px; color: var(--ink-muted);">
+            Result: 4 group receipts resolved in only 2 direct payments. Zero debt remaining.
+          </div>
+        </div>
+
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-muted); text-align:center;">
+          🔒 Local browser storage • No credit card • Instant access
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Secondary Technical Specifications Grid -->
+    <section class="specs-grid">
+      <div class="spec-card">
+        <div class="spec-card-num">// 01_ISOLATED_LEDGERS</div>
+        <div class="spec-card-title">Sandboxed Group Ledgers</div>
+        <div class="spec-card-text">Create separate ledgers for household expenses, weekend trips, and shared bills with custom member rosters.</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-card-num">// 02_MATH_ENGINE</div>
+        <div class="spec-card-title">Greedy Debt Reduction</div>
+        <div class="spec-card-text">Graph-reduction algorithm simplifies circular payment chains into the fewest direct transfers possible.</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-card-num">// 03_ZERO_DATA_LEAK</div>
+        <div class="spec-card-title">Client-First Privacy</div>
+        <div class="spec-card-text">Data stays in your browser's local session. Fast, offline-capable, and private with zero advertising trackers.</div>
+      </div>
+    </section>
+
+    <!-- System Footer -->
+    <footer class="system-footer">
+      <div>FAIRSHARE RECONCILIATION SUITE • AUTOMATED GROUP EXPENSE SPLITTING</div>
+      <div style="color: var(--secondary);">STATUS: 100% OPERATIONAL</div>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // Context-aware dynamic navigation for logged in users
+    const curUser = getCurrentUser();
+    if (curUser) {
+      const userName = getUserName(curUser) || curUser;
+      
+      const navSlot = document.getElementById("navAuthSlot");
+      if (navSlot) {
+        navSlot.innerHTML = `
+          <a href="dashboard.html" class="btn" style="padding: 7px 14px; font-size: 11px;">DASHBOARD (${escapeHtml(userName)})</a>
+          <button class="btn secondary" style="padding: 7px 12px; font-size: 11px;" onclick="logout()">LOGOUT</button>
+        `;
+      }
+
+      const heroSlot = document.getElementById("heroCtaSlot");
+      if (heroSlot) {
+        heroSlot.innerHTML = `
+          <a href="dashboard.html" class="btn" style="padding: 12px 24px; font-size: 13px;">
+            <span>OPEN MY DASHBOARD</span>
+            <span class="mono">→</span>
+          </a>
+          <a href="groups.html" class="btn secondary" style="padding: 12px 20px; font-size: 13px;">
+            <span>VIEW GROUPS</span>
+          </a>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

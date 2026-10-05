@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Group Ledger</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a href="index.html" class="logo">
+        FAIRSHARE <span style="font-family:var(--font-mono); font-size:11px; color:var(--signal-green);">[FS]</span>
+      </a>
+      
+      <div class="sidebar-section-label">// LEDGER WORKSPACE</div>
+      <a class="nav-btn" href="dashboard.html">◈ Overview</a>
+      <a class="nav-btn" href="groups.html">👥 My Groups</a>
+      <a class="nav-btn" href="add-group.html">+ New Group</a>
+      <a class="nav-btn" href="add-expense.html">💸 Record Expense</a>
+      <a class="nav-btn" href="view-expenses.html">📜 Expense Logs</a>
+      <a class="nav-btn" href="settle-up.html">⚡ Settle Up</a>
+
+      <div style="flex:1;"></div>
+      <button class="nav-btn danger" onclick="logout()">⏻ Logout</button>
+    </aside>
+
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <div class="small-muted" style="text-transform:uppercase;font-family:var(--font-mono);font-size:10px;">ACTIVE GROUP LEDGER</div>
+          <h3 id="gp_title">Loading Group...</h3>
+        </div>
+        <div class="flex">
+          <button class="btn secondary" onclick="document.getElementById('mmodal').style.display='flex'">+ Add Member</button>
+          <a class="btn" href="settle-up.html">⚡ Settle Up</a>
+        </div>
+      </div>
+
+      <!-- Net Balances Breakdown -->
+      <div class="card" id="balanceBox"></div>
+
+      <!-- Quick Record Expense Form -->
+      <div class="card">
+        <div class="mono" style="font-size:11px;color:var(--ink-muted);margin-bottom:10px;text-transform:uppercase;">
+          // Record Shared Expense
+        </div>
+        <div class="grid-3" style="margin-bottom:8px;">
+          <div>
+            <label class="small-muted">Expense Description</label>
+            <input id="expName" placeholder="e.g. Groceries, Dinner, Fuel">
+          </div>
+          <div>
+            <label class="small-muted">Amount (₹)</label>
+            <input id="expAmount" type="number" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div>
+            <label class="small-muted">Paid By</label>
+            <select id="expPaidBy"></select>
+          </div>
+        </div>
+        <button class="btn" onclick="addExpenseToActive()">+ Add Expense</button>
+      </div>
+
+      <!-- Member Roster -->
+      <div class="card">
+        <div class="flex-between" style="margin-bottom:10px;">
+          <div class="mono" style="font-size:11px;color:var(--ink-muted);text-transform:uppercase;">Group Members</div>
+          <button class="btn btn-sm secondary" onclick="document.getElementById('mmodal').style.display='flex'">+ Add Member</button>
+        </div>
+        <div id="memberList"></div>
+      </div>
+
+      <!-- Expense History -->
+      <div>
+        <div class="mono" style="font-size:11px;color:var(--ink-muted);margin-bottom:8px;text-transform:uppercase;">
+          Expense History
+        </div>
+        <div id="expenseList"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Member Modal -->
+  <div id="mmodal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;z-index:999;">
+    <div style="background:var(--surface-base);border:1px solid var(--line-strong);padding:24px;border-radius:var(--radius-sm);width:380px;box-shadow:0 20px 50px rgba(0,0,0,0.9);">
+      <div class="mono" style="font-size:11px;color:var(--signal-green);margin-bottom:8px;">// ADD MEMBER TO GROUP</div>
+      <h3 style="font-size:18px;margin-bottom:12px;">New Participant</h3>
+      
+      <label class="small-muted">Full Name</label>
+      <input id="memberName" placeholder="e.g. Alex Rivera" style="margin-bottom:10px;">
+      
+      <label class="small-muted">Email Address</label>
+      <input id="memberEmail" type="email" placeholder="e.g. alex@example.com" style="margin-bottom:16px;">
+      
+      <div class="flex" style="justify-content:flex-end;">
+        <button class="btn secondary" onclick="document.getElementById('mmodal').style.display='none'">Cancel</button>
+        <button class="btn" onclick="addMemberToActive();document.getElementById('mmodal').style.display='none'">Add Member</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    loadGroupDetails();
+  </script>
+</body>
+</html>

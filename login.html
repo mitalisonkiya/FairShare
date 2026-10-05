@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-card">
+    <h2>FairShare</h2>
+    <p class="small-muted">Login to continue</p>
+    <form id="loginForm" onsubmit="event.preventDefault(); loginUser();">
+      <input id="li_email" type="email" placeholder="Email" required autocomplete="email">
+      <input id="li_password" type="password" placeholder="Password" required autocomplete="current-password">
+      <button class="btn" type="submit" style="width:100%;margin-top:12px">Login</button>
+    </form>
+    <div class="links">
+      <a class="small-muted" href="signup.html">Create account</a>
+      <a class="small-muted" href="forgot-password.html">Forgot password?</a>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

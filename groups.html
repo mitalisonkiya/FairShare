@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Manage Groups</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a href="index.html" class="logo">
+        FAIRSHARE <span style="font-family:var(--font-mono); font-size:11px; color:var(--signal-green);">[FS]</span>
+      </a>
+      
+      <div class="sidebar-section-label">// LEDGER WORKSPACE</div>
+      <a class="nav-btn" href="dashboard.html">◈ Overview</a>
+      <a class="nav-btn active" href="groups.html">👥 My Groups</a>
+      <a class="nav-btn" href="add-group.html">+ New Group</a>
+      <a class="nav-btn" href="add-expense.html">💸 Record Expense</a>
+      <a class="nav-btn" href="view-expenses.html">📜 Expense Logs</a>
+      <a class="nav-btn" href="settle-up.html">⚡ Settle Up</a>
+
+      <div style="flex:1;"></div>
+      <button class="nav-btn danger" onclick="logout()">⏻ Logout</button>
+    </aside>
+
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <h3>Group Directory</h3>
+          <div class="small-muted">All active shared expense spaces</div>
+        </div>
+        <div>
+          <a class="btn" href="add-group.html">+ Create New Group</a>
+        </div>
+      </div>
+
+      <div id="groupList" class="flex-col"></div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    loadGroupsPage();
+  </script>
+</body>
+</html>

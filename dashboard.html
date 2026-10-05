@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Dashboard Overview</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Unified Sidebar Navigation -->
+    <aside class="sidebar">
+      <a href="index.html" class="logo">
+        FAIRSHARE <span style="font-family:var(--font-mono); font-size:11px; color:var(--signal-green);">[FS]</span>
+      </a>
+      
+      <div class="sidebar-section-label">// LEDGER WORKSPACE</div>
+      <a class="nav-btn active" href="dashboard.html">◈ Overview</a>
+      <a class="nav-btn" href="groups.html">👥 My Groups</a>
+      <a class="nav-btn" href="add-group.html">+ New Group</a>
+      <a class="nav-btn" href="add-expense.html">💸 Record Expense</a>
+      <a class="nav-btn" href="view-expenses.html">📜 Expense Logs</a>
+      <a class="nav-btn" href="settle-up.html">⚡ Settle Up</a>
+
+      <div style="flex:1;"></div>
+      
+      <div class="sidebar-section-label">// ACTIVE SESSION</div>
+      <div class="badge mono" id="curUserBox" style="word-break:break-all;margin-bottom:8px;"></div>
+      <button class="nav-btn danger" onclick="logout()">⏻ Logout</button>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <h3>Overview</h3>
+          <div class="small-muted">Portfolio balance & active expense ledgers</div>
+        </div>
+        <div class="flex">
+          <a class="btn" href="add-group.html">+ New Group</a>
+          <a class="btn secondary" href="add-expense.html">+ Record Expense</a>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="grid-3">
+        <div class="stat-card">
+          <div class="stat-label">Total Groups</div>
+          <div class="stat-value" id="kpiGroups">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Volume Tracked</div>
+          <div class="stat-value" id="kpiVolume" style="color:var(--signal-cyan);">₹ 0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Your Net Balance</div>
+          <div class="stat-value positive" id="kpiBalance">₹ 0.00</div>
+        </div>
+      </div>
+
+      <!-- Group Cards Stream -->
+      <div>
+        <div class="mono" style="font-size:11px;color:var(--ink-muted);margin-bottom:10px;text-transform:uppercase;">
+          Active Ledgers
+        </div>
+        <div id="overviewContent" class="flex-col"></div>
+      </div>
+
+      <footer class="footer">
+        FairShare • Client-Encrypted Local Storage Engine
+      </footer>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    loadDashboard();
+  </script>
+</body>
+</html>

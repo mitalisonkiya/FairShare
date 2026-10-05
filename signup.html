@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Signup</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-card">
+    <h2>Create account</h2>
+    <form id="signupForm" onsubmit="event.preventDefault(); signupUser();">
+      <input id="su_name" placeholder="Full name" required autocomplete="name">
+      <input id="su_email" type="email" placeholder="Email" required autocomplete="email">
+      <input id="su_password" type="password" placeholder="Password (min 6)" required autocomplete="new-password">
+      <input id="su_password2" type="password" placeholder="Confirm password" required autocomplete="new-password">
+      <button class="btn" type="submit" style="width:100%;margin-top:12px">Sign up</button>
+    </form>
+    <div class="links"><a class="small-muted" href="login.html">Already have account? Login</a></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Create New Group</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a href="index.html" class="logo">
+        FAIRSHARE <span style="font-family:var(--font-mono); font-size:11px; color:var(--signal-green);">[FS]</span>
+      </a>
+      
+      <div class="sidebar-section-label">// LEDGER WORKSPACE</div>
+      <a class="nav-btn" href="dashboard.html">◈ Overview</a>
+      <a class="nav-btn" href="groups.html">👥 My Groups</a>
+      <a class="nav-btn active" href="add-group.html">+ New Group</a>
+      <a class="nav-btn" href="add-expense.html">💸 Record Expense</a>
+      <a class="nav-btn" href="view-expenses.html">📜 Expense Logs</a>
+      <a class="nav-btn" href="settle-up.html">⚡ Settle Up</a>
+
+      <div style="flex:1;"></div>
+      <button class="nav-btn danger" onclick="logout()">⏻ Logout</button>
+    </aside>
+
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <h3>Create Group Ledger</h3>
+          <div class="small-muted">Initialize a sandboxed shared expense space</div>
+        </div>
+      </div>
+
+      <div class="card" style="max-width:540px;">
+        <div class="mono" style="font-size:11px;color:var(--signal-green);margin-bottom:8px;">// NEW LEDGER SETUP</div>
+        
+        <label class="small-muted">Group Name</label>
+        <input id="groupName" placeholder="e.g. Flat 304, Trip to Manali, Birthday Bash" autofocus>
+        
+        <div style="margin-top:14px;" class="small-muted">
+          You will automatically be added as the group administrator. You can invite other members immediately after creation.
+        </div>
+
+        <div class="flex" style="margin-top:20px;">
+          <button class="btn" onclick="createGroup()">Create Group</button>
+          <a class="btn secondary" href="groups.html">Cancel</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
